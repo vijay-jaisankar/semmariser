@@ -7,10 +7,13 @@ const getClient = () => {
     return client;
 }
 
-
-
 const getJob = async(client, file_path) => {
     const job = await client.submitJobLocalFile(file_path);
+    return job;
+}
+
+const getJobRemote = async(client, file_url) => {
+    const job = await client.submitJobUrl(file_url);
     return job;
 }
 
@@ -20,7 +23,6 @@ const getPendingJobs = async(client) => {
 }
 
 const checkTranscribed = async(client, id) => {
-    // L6PGLS3dBb0xY531
     let pendingJobs = await getPendingJobs(client);
     for(let i = 0; i < pendingJobs.length; i++){
         if (pendingJobs[i]['id'] === id){
@@ -47,11 +49,15 @@ const getText = async(client, job) => {
     return null;
 }
 
+const transcribePodcast = async(url) => {
+    let client = getClient();
+    let job = await getJobRemote(client, url);
+    let text = await getText(client, job);
+    return text;
+}
 
 // Main block
 (async () => {
-    let client = getClient();
-    let job = await getJob(client, "./sample_audio_files/sample1.mp3");
-    let text = await getText(client, job);
+    let text = await transcribePodcast("https://soktpsszydugdumqagyc.supabase.co/storage/v1/object/public/podcasts/d0179c42-4d23-444b-b549-3cabdf6ced75.mp3");
     console.log(text);
   })();

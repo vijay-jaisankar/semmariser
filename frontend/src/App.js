@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 import { RevAiApiClient,RevAiApiDeployment, RevAiApiDeploymentConfigMap } from "revai-node-sdk";
 
+import MindsDB from "mindsdb-js-sdk";
 
 const getClient = () => {
     const accessToken = process.env.REACT_APP_REVAI_KEY;
@@ -66,11 +67,34 @@ const transcribePodcast = async(url) => {
     return text;
 }
 
+const userDetails = {
+    user: process.env.MINDSDB_USER,
+    password: process.env.MINDSDB_PASS
+};
 
+
+const connectToMindsDB = async (user) => {
+    await MindsDB.connect(user);
+}
+
+const getSummarisedText = async (text) => {
+    const model = await MindsDB.Models.getModel("summariser_en", "mindsdb");
+    console.log(model);
+    
+    const queryOptions = {
+        where: [
+            `text_long = "${text}"`
+        ]
+    }
+
+    const prediction = await model.query(queryOptions);
+    return prediction;
+}
 
 
 function App() {
     const [podcasts, setpodcasts] = useState([]);
+
 
     async function getpodcasts() {
         const {data, error} = await supabase.storage.from("podcasts").list("");
@@ -102,8 +126,19 @@ function App() {
 
         if(data) {
             console.log(data);
+
+            // Transcribe text
             const text = await transcribePodcast(process.env.REACT_APP_PODCAST_CDN + data.path);
             console.log("Transcribed text: " + text);
+
+            // Summarise text
+            await connectToMindsDB({
+                user: process.env.MINDSDB_USER,
+                password: process.env.MINDSDB_PASS
+            });
+            console.log("Connected!")
+            let summary = await getSummarisedText(text);
+            console.log(summary);
         }
 	}
 

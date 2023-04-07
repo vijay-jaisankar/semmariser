@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "mindsdb-js-sdk": "^2.2.0",
-    "revai-node-sdk": "^3.6.2"
-  }
-}

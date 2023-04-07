@@ -19,6 +19,18 @@ const connectToMindsDB = async (user) => {
     await MindsDB.default.connect(user);
 }
 
+const getSummarisedText = async (text) => {
+    const model = await MindsDB.default.Models.getModel("summariser_en", "mindsdb");
+    
+    const queryOptions = {
+        where: [
+            `text_long = "${text}"`
+        ]
+    }
+
+    const prediction = await model.query(queryOptions);
+    return prediction;
+}
 
 // Express API setup
 const app = express();
@@ -32,7 +44,6 @@ app.use(
 app.use(bodyParser.json());
 
 
-// MindsDB setup
 
 // Base route
 app.get("/", function (req, res) {
@@ -49,7 +60,20 @@ app.get("/login", async function (req, res) {
         res.json(error);
     }
     
-})
+});
+
+// Text summarisation route
+app.get("/summary", async function (req, res) {
+    let text = req.body.text;
+    try{
+        let summaryText = await getSummarisedText(text);
+        let retValue = summaryText["data"]["text_summary"]
+        res.json({"summary": retValue});
+    }
+    catch(error){
+        res.json(error);
+    }
+});
 
 // Run the API
 const port = 3000;

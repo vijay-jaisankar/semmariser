@@ -47,7 +47,9 @@ function App() {
 				process.env.REACT_APP_PODCAST_CDN + data.path
 			);
 			console.log("Transcribed text: " + text);
-			fetch("http://localhost:9000/summary", {
+			const apiUrl = (process.env.API_BASE || "http://localhost:9000") + "/summary"
+			console.log(apiUrl);
+			fetch(apiUrl, {
 				method: "POST",
 				headers: {
 					"content-type": "application/json",
@@ -72,6 +74,8 @@ function App() {
 				.catch((err) => {
 					console.log(err);
 				});
+			// Force re-render page on file upload to reflect new changes (ref https://stackoverflow.com/questions/30626030/can-you-force-a-react-component-to-rerender-without-calling-setstate)
+			// getpodcasts();
 		}
 	}
 

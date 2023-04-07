@@ -6,7 +6,7 @@ const cors = require("cors");
 const MindsDB = require("mindsdb-js-sdk");
 
 // Dotenv setup
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "../frontend/.env" });
 
 // MindsDB setup
 const user = {
@@ -75,6 +75,7 @@ app.post("/summary", async function (req, res) {
 		let retValue = summaryText["data"]["text_summary"];
 		res.json({ summary: retValue });
 	} catch (error) {
+		console.log(error);
 		res.json(error);
 	}
 });

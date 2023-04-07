@@ -6,71 +6,8 @@ import supabase from "./config/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 
-import {
-	RevAiApiClient,
-	RevAiApiDeployment,
-	RevAiApiDeploymentConfigMap,
-} from "revai-node-sdk";
+import transcribePodcast from "./Transcriber";
 
-const getClient = () => {
-	const accessToken = process.env.REACT_APP_REVAI_KEY;
-	const client = new RevAiApiClient({
-		token: accessToken,
-		deploymentConfig: RevAiApiDeploymentConfigMap.get(
-			RevAiApiDeployment.US
-		),
-	});
-	return client;
-};
-
-const getJob = async (client, file_path) => {
-	const job = await client.submitJobLocalFile(file_path);
-	return job;
-};
-
-const getJobRemote = async (client, file_url) => {
-	const job = await client.submitJobUrl(file_url);
-	return job;
-};
-
-const getPendingJobs = async (client) => {
-	const jobs = await client.getListOfJobs();
-	return jobs;
-};
-
-const checkTranscribed = async (client, id) => {
-	let pendingJobs = await getPendingJobs(client);
-	for (let i = 0; i < pendingJobs.length; i++) {
-		if (pendingJobs[i]["id"] === id) {
-			if (pendingJobs[i]["status"] === "transcribed") {
-				return true;
-			}
-		}
-	}
-
-	return false;
-};
-
-const getText = async (client, job) => {
-	while (true) {
-		let status = await checkTranscribed(client, job.id);
-		if (status === true) {
-			const textStream = await client.getTranscriptText(job.id);
-			return textStream;
-		}
-		await new Promise((r) => setTimeout(r, 3000));
-		console.log("Retrying...");
-	}
-
-	return null;
-};
-
-const transcribePodcast = async (url) => {
-	let client = getClient();
-	let job = await getJobRemote(client, url);
-	let text = await getText(client, job);
-	return text;
-};
 
 function App() {
 	const [podcasts, setpodcasts] = useState(null);
@@ -110,7 +47,9 @@ function App() {
 				process.env.REACT_APP_PODCAST_CDN + data.path
 			);
 			console.log("Transcribed text: " + text);
-			fetch("http://localhost:9000/summary", {
+			const apiUrl = (process.env.API_BASE || "http://localhost:9000") + "/summary"
+			console.log(apiUrl);
+			fetch(apiUrl, {
 				method: "POST",
 				headers: {
 					"content-type": "application/json",
@@ -135,6 +74,8 @@ function App() {
 				.catch((err) => {
 					console.log(err);
 				});
+			// Force re-render page on file upload to reflect new changes (ref https://stackoverflow.com/questions/30626030/can-you-force-a-react-component-to-rerender-without-calling-setstate)
+			// getpodcasts();
 		}
 	}
 

@@ -47,7 +47,7 @@ function App() {
 				process.env.REACT_APP_PODCAST_CDN + data.path
 			);
 			console.log("Transcribed text: " + text);
-			const apiUrl = (process.env.API_BASE || "http://localhost:9000") + "/summary"
+			const apiUrl = (process.env.API_BASE || "https://mindsdb-api.onrender.com") + "/summary"
 			console.log(apiUrl);
 			fetch(apiUrl, {
 				method: "POST",

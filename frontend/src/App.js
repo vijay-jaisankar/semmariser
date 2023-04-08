@@ -81,7 +81,7 @@ function App() {
 
 	return (
 		<Container className="mt-5" style={{ width: "700px" }}>
-			<h1>Podcast Feed</h1>
+			<span aria-hidden="true" className="glitch">Semmariser</span>
 			<Form.Group className="mb-3 mt-3">
 				<Form.Label> <span className="info-box" style={{fontWeight: 'medium'}}> Upload your podcast audio file here! </span></Form.Label>
 				<Form.Control

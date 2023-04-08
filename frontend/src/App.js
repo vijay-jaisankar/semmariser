@@ -83,7 +83,7 @@ function App() {
 		<Container className="mt-5" style={{ width: "700px" }}>
 			<h1>Podcast Feed</h1>
 			<Form.Group className="mb-3 mt-3">
-				<Form.Label>Upload your podcast audio file here!</Form.Label>
+				<Form.Label> <span className="info-box" style={{fontWeight: 'medium'}}> Upload your podcast audio file here! </span></Form.Label>
 				<Form.Control
 					type="file"
 					accept="audio/mp3"
@@ -95,18 +95,20 @@ function App() {
 				{podcasts && podcasts.map((podcast) => {
 					return (
 						<Col md={4} key={podcast.id}>
-							<Card>
-								<audio controls>
-									<source
-										src={podcast.file}
-										type="audio/mp3"
-									></source>
-								</audio>
-                                <Card.Body>
-                                    <Card.Title></Card.Title>
-                                    <Card.Text>{podcast.summary}</Card.Text>
-                                </Card.Body>
-							</Card>
+								<Card>
+									<audio controls>
+										<source
+											src={podcast.file}
+											type="audio/mp3"
+										></source>
+									</audio>
+									<Card.Body>
+										<Card.Title></Card.Title>
+										<Card.Text>
+											{podcast.summary}
+										</Card.Text>
+									</Card.Body>
+								</Card>
 						</Col>
 					);
 				})}

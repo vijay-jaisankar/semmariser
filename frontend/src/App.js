@@ -11,6 +11,7 @@ import transcribePodcast from "./Transcriber";
 
 function App() {
 	const [podcasts, setpodcasts] = useState(null);
+    const [count, setCount] = useState(1);
 
 	async function getpodcasts() {
 		const { data, error } = await supabase.from("podcast_summary").select();
@@ -63,19 +64,23 @@ function App() {
 				.then(async (response) => {
 					console.log(response);
                     const  {data, error} = await supabase.from("podcast_summary").insert([{file: podcastFileLink , summary: response.summary}])
-
+                    window.location.reload();
                     if(data) {
                         console.log(data);
+                        getpodcasts();
                     } 
                     if(error) {
                         console.error(error);
+        
                     }
 				})
 				.catch((err) => {
 					console.log(err);
+   
 				});
 			// Force re-render page on file upload to reflect new changes (ref https://stackoverflow.com/questions/30626030/can-you-force-a-react-component-to-rerender-without-calling-setstate)
 			// getpodcasts();
+            
 		}
 	}
 

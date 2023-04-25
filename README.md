@@ -7,7 +7,7 @@ The best part about Semmariser is that it is incredibly user-friendly and is acc
 
 
 ## Deployed link
-https://mindsdb.hackathonrunway.repl.co/
+https://mindsdb.hackathonrunway.repl.co/ (Note: You may need to enable CORS policy on your browser - we recommend the `CORS Everywhere` extension on Firefox.)
 
 ## Blog Post
 https://vijayjaisankar.hashnode.dev/sql-sorcery-with-mindsdb-and-express-clgqci2yt000h09jt0rzr8ink

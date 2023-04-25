@@ -106,7 +106,7 @@ function App() {
 				{podcasts && podcasts.map((podcast) => {
 					return (
 						<Col md={4} key={podcast.id}>
-								<Card>
+								<Card className="h-100 card-height d-flex flex-fill">
 									<audio controls>
 										<source
 											src={podcast.file}

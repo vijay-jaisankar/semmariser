@@ -6,7 +6,7 @@ const cors = require("cors");
 const MindsDB = require("mindsdb-js-sdk");
 
 // Dotenv setup
-dotenv.config({ path: "../frontend/.env" });
+dotenv.config({ path: "../.env" });
 
 // MindsDB setup
 const user = {

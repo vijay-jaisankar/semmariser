@@ -11,3 +11,9 @@ https://mindsdb.hackathonrunway.repl.co/
 
 ## Blog Post
 https://vijayjaisankar.hashnode.dev/sql-sorcery-with-mindsdb-and-express-clgqci2yt000h09jt0rzr8ink
+
+## Running Semmariser locally
+- Create a new file named `.env` and populate it with API keys and URLs specified in `.env.example`.
+- To install all dependencies, run `npm install` in both the `api` and `frontend` directories.
+- To run the API, navigate to the `api` directory and run `node textSummary.js`
+- To run the frontend, navigate to the `frontend` directory and run `npm start`.
